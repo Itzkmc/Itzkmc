@@ -1,10 +1,560 @@
-- 👋 Hi, I’m @Itzkmc
-- 👀 I’m interested in ...
-- 🌱 I’m currently learning ...
-- 💞️ I’m looking to collaborate on ...
-- 📫 How to reach me ...
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Modern Hotel Booking</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap');
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    header {
+      background: linear-gradient(90deg, #007bff 0%, #0056b3 100%);
+      padding: 1rem 2rem;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header h1 {
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: 2px;
+      user-select: none;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-weight: 600;
+      transition: opacity 0.3s ease;
+    }
+    nav a:hover {
+      opacity: 0.8;
+    }
+    main {
+      max-width: 1100px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+    section {
+      margin-bottom: 4rem;
+      background: white;
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 0 15px rgb(0 0 0 / 0.05);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+      color: #007bff;
+      letter-spacing: 1.2px;
+    }
+    /* Booking Form */
+    form.booking-form {
+      max-width: 600px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: end;
+    }
+    form.booking-form label {
+      display: flex;
+      flex-direction: column;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #555;
+    }
+    form.booking-form input[type="date"],
+    form.booking-form select {
+      padding: 0.6rem 0.8rem;
+      font-size: 1rem;
+      border: 1.5px solid #ddd;
+      border-radius: 5px;
+      transition: border-color 0.3s;
+    }
+    form.booking-form input[type="date"]:focus,
+    form.booking-form select:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+    form.booking-form button {
+      grid-column: span 2;
+      padding: 0.8rem 1rem;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: white;
+      background: #007bff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      box-shadow: 0 5px 15px rgba(0,123,255,0.4);
+      user-select: none;
+    }
+    form.booking-form button:hover {
+      background: #0056b3;
+      box-shadow: 0 5px 20px rgba(0,86,179,0.6);
+    }
+    .booking-message {
+      text-align: center;
+      margin-top: 1rem;
+      font-weight: 600;
+      font-size: 1rem;
+      color: green;
+    }
+    .error-message {
+      color: #d93025;
+      font-weight: 600;
+      text-align: center;
+      margin-top: 1rem;
+    }
 
-<!---
-Itzkmc/Itzkmc is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+    /* Reviews */
+    .reviews-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+    }
+    .review-card {
+      background: #f1faff;
+      border-radius: 8px;
+      box-shadow: 0 1px 8px rgba(0,123,255,0.1);
+      padding: 1rem 1.2rem;
+      width: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.3s ease;
+      user-select: none;
+    }
+    .review-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,123,255,0.15);
+    }
+    .review-text {
+      font-style: italic;
+      color: #333;
+      margin-bottom: 0.8rem;
+      flex-grow: 1;
+    }
+    .review-author {
+      font-weight: 700;
+      color: #007bff;
+      font-size: 0.9rem;
+    }
+    .stars {
+      color: #f7b731;
+      margin-bottom: 0.5rem;
+      user-select: none;
+    }
+
+    /* Availability Calendar */
+    .calendar {
+      max-width: 700px;
+      margin: 1rem auto;
+      user-select: none;
+    }
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: #007bff;
+    }
+    .calendar-controls button {
+      background: #007bff;
+      border: none;
+      color: white;
+      padding: 0.5rem 0.8rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+    .calendar-controls button:hover {
+      background: #0056b3;
+    }
+    table.calendar-table {
+      width: 100%;
+      border-collapse: collapse;
+      box-shadow: 0 1px 9px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      user-select: none;
+    }
+    table.calendar-table th,
+    table.calendar-table td {
+      text-align: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #ddd;
+      border-right: 1px solid #ddd;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: default;
+    }
+    table.calendar-table th:last-child,
+    table.calendar-table td:last-child {
+      border-right: none;
+    }
+    table.calendar-table th {
+      background: #007bff;
+      color: white;
+      user-select: none;
+    }
+    table.calendar-table td {
+      background: #f9f9f9;
+      user-select: none;
+    }
+    table.calendar-table td.available:hover {
+      background: #d0e6ff;
+      cursor: pointer;
+    }
+    table.calendar-table td.booked {
+      background: #ff6b6b;
+      color: white;
+      cursor: not-allowed;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      form.booking-form {
+        grid-template-columns: 1fr;
+      }
+      form.booking-form button {
+        grid-column: span 1;
+      }
+      .reviews-list {
+        justify-content: center;
+      }
+      .review-card {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>BlueBay Hotel</h1>
+    <nav>
+      <a href="#booking">Book Room</a>
+      <a href="#availability">Availability</a>
+      <a href="#reviews">Reviews</a>
+    </nav>
+  </header>
+  <main>
+    <section id="booking" aria-label="Room Booking Form">
+      <h2>Book Your Stay</h2>
+      <form class="booking-form" id="bookingForm" novalidate>
+        <label for="roomType">Room Type
+          <select id="roomType" required>
+            <option value="" disabled selected>Select room</option>
+            <option value="single">Single Room - $100/night</option>
+            <option value="double">Double Room - $150/night</option>
+            <option value="suite">Suite - $250/night</option>
+          </select>
+        </label>
+        <label for="checkIn">Check-In Date
+          <input type="date" id="checkIn" required min="" aria-required="true" />
+        </label>
+        <label for="checkOut">Check-Out Date
+          <input type="date" id="checkOut" required min="" aria-required="true" />
+        </label>
+        <button type="submit" aria-label="Book Room Now">Book Now</button>
+      </form>
+      <div aria-live="polite" class="booking-message" id="bookingMessage"></div>
+      <div class="error-message" id="bookingError"></div>
+    </section>
+
+    <section id="availability" aria-label="Room Availability Calendar">
+      <h2>Room Availability Calendar</h2>
+      <div class="calendar" role="region" aria-live="polite" aria-atomic="true">
+        <div class="calendar-header">
+          <div class="calendar-controls">
+            <button id="prevMonth" aria-label="Previous Month">&lt;</button>
+            <button id="nextMonth" aria-label="Next Month">&gt;</button>
+          </div>
+          <div id="calendarMonthYear" aria-label="Current Month and Year"></div>
+          <div></div>
+        </div>
+        <table class="calendar-table" role="grid" aria-labelledby="calendarMonthYear">
+          <thead>
+            <tr>
+              <th scope="col">Sun</th><th scope="col">Mon</th><th scope="col">Tue</th><th scope="col">Wed</th><th scope="col">Thu</th><th scope="col">Fri</th><th scope="col">Sat</th>
+            </tr>
+          </thead>
+          <tbody id="calendarBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="reviews" aria-label="Customer Reviews">
+      <h2>What Our Guests Say</h2>
+      <div class="reviews-list" id="reviewsList" tabindex="0" aria-live="polite" aria-atomic="true">
+        <!-- Customer reviews inserted here -->
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      // Sample rooms and prices
+      const roomPrices = {
+        single: 100,
+        double: 150,
+        suite: 250,
+      };
+
+      // Sample existing bookings stored in localStorage or default
+      // Booking format: {roomType, checkIn(Date string), checkOut(Date string)}
+      let bookings = JSON.parse(localStorage.getItem('hotelBookings') || '[]');
+
+      // Sample customer reviews data
+      const reviews = [
+        {text: "Amazing stay! The staff were super friendly and the rooms were spotless.", author: "Anna K.", rating: 5},
+        {text: "Loved the location and the view from the suite. Highly recommend!", author: "John P.", rating: 4},
+        {text: "Good value for money. Breakfast could be better.", author: "Maria L.", rating: 3},
+        {text: "Comfortable stay but experienced some noise from the street.", author: "Jake W.", rating: 4},
+        {text: "Fantastic amenities and helpful concierge service.", author: "Sophie R.", rating: 5},
+      ];
+
+      // Initialize today's date and min dates for inputs
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      const todayStr = `${yyyy}-${mm}-${dd}`;
+
+      // Elements
+      const checkInInput = document.getElementById('checkIn');
+      const checkOutInput = document.getElementById('checkOut');
+      const roomTypeSelect = document.getElementById('roomType');
+      const bookingForm = document.getElementById('bookingForm');
+      const bookingMessage = document.getElementById('bookingMessage');
+      const bookingError = document.getElementById('bookingError');
+
+      // Set minimum dates for inputs
+      checkInInput.setAttribute('min', todayStr);
+      checkOutInput.setAttribute('min', todayStr);
+
+      // Utility to parse date strings
+      function parseDateStr(s) {
+        return new Date(s + 'T00:00:00');
+      }
+
+      // Check if date range overlaps any existing bookings for specific room type
+      function isRoomAvailable(roomType, checkIn, checkOut) {
+        for (let b of bookings) {
+          if (b.roomType === roomType) {
+            let bookedIn = parseDateStr(b.checkIn);
+            let bookedOut = parseDateStr(b.checkOut);
+            // Overlap check: checkIn < bookedOut and checkOut > bookedIn
+            if (checkIn < bookedOut && checkOut > bookedIn) {
+              return false;
+            }
+          }
+        }
+        return true;
+      }
+
+      // Update checkOut min date dynamically on checkIn change
+      checkInInput.addEventListener('change', () => {
+        const inDate = checkInInput.value;
+        if (inDate) {
+          let minOutDate = new Date(parseDateStr(inDate));
+          minOutDate.setDate(minOutDate.getDate() + 1);
+          const yyyy = minOutDate.getFullYear();
+          const mm = String(minOutDate.getMonth() + 1).padStart(2, '0');
+          const dd = String(minOutDate.getDate()).padStart(2, '0');
+          const newMinOut = `${yyyy}-${mm}-${dd}`;
+          checkOutInput.min = newMinOut;
+          if (checkOutInput.value && checkOutInput.value <= inDate) {
+            checkOutInput.value = '';
+          }
+        } else {
+          checkOutInput.min = todayStr;
+        }
+      });
+
+      // Booking form submission handler
+      bookingForm.addEventListener('submit', e => {
+        e.preventDefault();
+        bookingMessage.textContent = '';
+        bookingError.textContent = '';
+
+        const roomType = roomTypeSelect.value;
+        const checkIn = checkInInput.value;
+        const checkOut = checkOutInput.value;
+        if (!roomType || !checkIn || !checkOut) {
+          bookingError.textContent = "Please fill in all booking fields.";
+          return;
+        }
+
+        const checkInDate = parseDateStr(checkIn);
+        const checkOutDate = parseDateStr(checkOut);
+
+        if (checkOutDate <= checkInDate) {
+          bookingError.textContent = "Check-out date must be after check-in date.";
+          return;
+        }
+
+        if (!isRoomAvailable(roomType, checkInDate, checkOutDate)) {
+          bookingError.textContent = "Sorry, the selected room is not available for these dates.";
+          return;
+        }
+
+        // Simulate payment integration with alert and then save booking
+        const nights = Math.floor((checkOutDate - checkInDate) / (1000 * 3600 * 24));
+        const price = nights * roomPrices[roomType];
+        if (confirm(`Total: $${price}. Proceed to payment?`)) {
+          // Simulate payment success
+          bookings.push({roomType, checkIn, checkOut});
+          localStorage.setItem('hotelBookings', JSON.stringify(bookings));
+          bookingMessage.textContent = `Booking confirmed! You reserved a ${roomType} from ${checkIn} to ${checkOut}.`;
+          bookingForm.reset();
+          checkOutInput.min = todayStr;
+          renderCalendar(currentYear, currentMonth);
+        }
+      });
+
+      // Customer reviews rendering
+      function renderReviews() {
+        const reviewsList = document.getElementById('reviewsList');
+        reviewsList.innerHTML = '';
+        for (let review of reviews) {
+          const card = document.createElement('article');
+          card.className = 'review-card';
+          card.setAttribute('tabindex', '0');
+          card.innerHTML = `
+            <div class="stars" aria-label="Rating: ${review.rating} out of 5 stars">${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</div>
+            <p class="review-text">"${review.text}"</p>
+            <p class="review-author">- ${review.author}</p>
+          `;
+          reviewsList.appendChild(card);
+        }
+      }
+
+      // Calendar rendering logic
+      const calendarBody = document.getElementById('calendarBody');
+      const calendarMonthYear = document.getElementById('calendarMonthYear');
+      const prevMonthBtn = document.getElementById('prevMonth');
+      const nextMonthBtn = document.getElementById('nextMonth');
+
+      let currentYear = today.getFullYear();
+      let currentMonth = today.getMonth();
+
+      // States for calendar usage
+      // Collect all booked dates per room type as set of date strings yyyy-mm-dd for quick lookup (merge all rooms for availability indicator)
+      function getBookedDates() {
+        const bookedDates = new Set();
+        for (const b of bookings) {
+          let start = parseDateStr(b.checkIn);
+          let end = parseDateStr(b.checkOut);
+          for (let d = new Date(start); d < end; d.setDate(d.getDate() + 1)) {
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            bookedDates.add(`${yyyy}-${mm}-${dd}`);
+          }
+        }
+        return bookedDates;
+      }
+
+      function renderCalendar(year, month) {
+        calendarBody.innerHTML = '';
+        calendarMonthYear.textContent = new Date(year, month).toLocaleDateString(undefined, {month: 'long', year: 'numeric'});
+        const firstDay = new Date(year, month, 1);
+        const lastDay = new Date(year, month + 1, 0);
+        const startDayOfWeek = firstDay.getDay();
+        const daysInMonth = lastDay.getDate();
+
+        const bookedDates = getBookedDates();
+
+        // Create blank cells for days before first of month
+        let row = document.createElement('tr');
+        for (let i = 0; i < startDayOfWeek; i++) {
+          const cell = document.createElement('td');
+          cell.textContent = '';
+          row.appendChild(cell);
+        }
+
+        // Create cells for each day
+        for (let day=1; day <= daysInMonth; day++) {
+          if ((row.children.length) === 7) {
+            calendarBody.appendChild(row);
+            row = document.createElement('tr');
+          }
+
+          const cell = document.createElement('td');
+          const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+          cell.textContent = day;
+
+          // Past dates unselectable and grey
+          const cellDate = new Date(year, month, day);
+          if (cellDate < today) {
+            cell.classList.add('booked');
+            cell.setAttribute('aria-disabled', 'true');
+          } else if (bookedDates.has(dateStr)) {
+            cell.classList.add('booked');
+            cell.setAttribute('aria-label', `${dateStr} - Booked`);
+            cell.setAttribute('aria-disabled', 'true');
+          } else {
+            cell.classList.add('available');
+            cell.setAttribute('aria-label', `${dateStr} - Available`);
+          }
+
+          row.appendChild(cell);
+        }
+
+        // Fill trailing empty cells for last row
+        while (row.children.length < 7) {
+          const cell = document.createElement('td');
+          cell.textContent = '';
+          row.appendChild(cell);
+        }
+        calendarBody.appendChild(row);
+      }
+
+      prevMonthBtn.addEventListener('click', () => {
+        currentMonth--;
+        if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+        }
+        renderCalendar(currentYear, currentMonth);
+      });
+
+      nextMonthBtn.addEventListener('click', () => {
+        currentMonth++;
+        if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+        }
+        renderCalendar(currentYear, currentMonth);
+      });
+
+      // Initialize
+      renderReviews();
+      renderCalendar(currentYear, currentMonth);
+    })();
+  </script>
+</body>
+</html>
+
